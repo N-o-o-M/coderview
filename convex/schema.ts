@@ -1,5 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { title } from "process";
+import { start } from "repl";
 export default defineSchema({
   // Define your schema here
   users: defineTable({
@@ -9,4 +11,24 @@ export default defineSchema({
     role: v.union(v.literal("candidate"), v.literal("interviewer")), // candidate or interviewer
     clerkId: v.string(),
   }).index("by_clerk_id", ["clerkId"]),
+
+  interviews: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    startTime: v.number(),
+    endTime: v.optional(v.number()),
+    status: v.string(),
+    streamCallId: v.string(),
+    candidateId: v.string(),
+    interviewerIds: v.array(v.string()),
+  })
+    .index("by_candidate_id", ["candidateId"])
+    .index("by_stream_call_id", ["streamCallId"]),
+
+  comments: defineTable({
+    content: v.string(),
+    rating: v.number(),
+    interviewId: v.string(),
+    interviewerId: v.string(),
+  }).index("by_interview_id", ["interviewId"]),
 });
