@@ -13,7 +13,7 @@ function Navbar() {
           href="/"
           className="flex items-center gap-2 font-semibold text-4xl mr-6 font-mono hover:opacity-80 transition-opacity"
         >
-          <span className="bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent  hover:from-amber-100 hover:to-amber-500">
+          <span className="bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent font-bold">
             CoderView
           </span>
         </Link>
