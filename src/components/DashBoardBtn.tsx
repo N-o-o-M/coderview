@@ -12,8 +12,8 @@ function DashBoardBtn() {
   return (
     <Link href={"/dashboard"}>
       <Button
-        variant="ghost"
-        className="gap-2 font-medium bg-blue-400 hover:bg-amber-300"
+        variant="default"
+        className="gap-2 font-medium bg-blue-500 hover:bg-amber-300"
       >
         Dashboard
       </Button>
