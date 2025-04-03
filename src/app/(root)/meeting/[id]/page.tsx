@@ -12,12 +12,11 @@ import { useState } from "react";
 function MeetingPage() {
   const { id } = useParams();
   const { isLoaded } = useUser();
-  const [isSetup, setIsSetup] = useState(true);
   const { call, isCallLoading } = useGetCallById(id);
 
-  if (!isLoaded || isCallLoading) {
-    return <LoaderUI />;
-  }
+  const [isSetupComplete, setIsSetupComplete] = useState(false);
+
+  if (!isLoaded || isCallLoading) return <LoaderUI />;
 
   if (!call) {
     return (
@@ -30,8 +29,8 @@ function MeetingPage() {
   return (
     <StreamCall call={call}>
       <StreamTheme>
-        {isSetup ? (
-          <MeetingSetup onSetupComplete={() => setIsSetup(true)} />
+        {!isSetupComplete ? (
+          <MeetingSetup onSetupComplete={() => setIsSetupComplete(true)} />
         ) : (
           <MeetingRoom />
         )}
@@ -39,5 +38,4 @@ function MeetingPage() {
     </StreamCall>
   );
 }
-
 export default MeetingPage;

@@ -8,6 +8,8 @@ import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
 import Homepage from "../components/homepage";
 import "./globals.css";
+import OnekoCat from "@/components/onekocat";
+import LoaderUI from "@/components/LoaderUI";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -50,6 +52,7 @@ export default function RootLayout({
             </SignedIn>
 
             <SignedOut>
+              <OnekoCat />
               <Homepage />
             </SignedOut>
           </ThemeProvider>

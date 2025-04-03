@@ -48,7 +48,7 @@ function MeetingModal({
           <div className="flex justify-end gap-3">
             <Button
               variant="destructive"
-              className="bg-red-400 hover:bg-slate-300"
+              className="bg-slate-400 hover:bg-red-300 hover:-translate-y-2"
               onClick={onClose}
             >
               Cancel
@@ -56,7 +56,7 @@ function MeetingModal({
             <Button
               onClick={handleStart}
               disabled={isJoinMeeting && !meetingurl.trim()}
-              className="bg-blue-400 hover:bg-amber-300"
+              className="bg-blue-400 hover:bg-amber-300 hover:-translate-y-2"
             >
               {isJoinMeeting ? "Join Meeting" : "Start Meeting"}
             </Button>
