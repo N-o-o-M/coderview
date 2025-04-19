@@ -1,19 +1,32 @@
 import React from "react";
 import styled from "styled-components";
 
-const SpinnerContainer = styled.div`
+interface LoaderUIProps {
+  size?: number;
+  color?: string;
+  overlayColor?: string;
+}
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${(props) =>
+    props.theme.overlayColor || "rgba(0, 0, 0, 0.3)"};
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  z-index: 1000;
 `;
 
-const Spinner = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(0, 0, 0, 0.1);
+const Spinner = styled.div<{ size: number; color: string }>`
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
+  border: ${(props) => Math.floor(props.size / 10)}px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top-color: #3498db;
+  border-top-color: ${(props) => props.color};
   animation: spin 1s ease-in-out infinite;
 
   @keyframes spin {
@@ -23,11 +36,15 @@ const Spinner = styled.div`
   }
 `;
 
-const LoaderUI = () => {
+const LoaderUI: React.FC<LoaderUIProps> = ({
+  size = 50,
+  color = "#3498db",
+  overlayColor = "rgba(0, 0, 0, 0.3)",
+}) => {
   return (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
+    <Overlay theme={{ overlayColor }}>
+      <Spinner size={size} color={color} />
+    </Overlay>
   );
 };
 

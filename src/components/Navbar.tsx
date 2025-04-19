@@ -1,8 +1,7 @@
-import { SignedIn, SignIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import DashBoardBtn from "./DashBoardBtn";
 import ModeToggle from "./modeToggle";
-import { Button } from "./ui/button";
 
 function Navbar() {
   return (
@@ -11,7 +10,7 @@ function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 font-semibold text-4xl mr-6 font-mono hover:opacity-80 transition-colors"
+          className="flex items-center gap-2 font-semibold text-3xl mr-6 font-mono hover:opacity-80 transition-transform duration-300 hover:scale-105"
         >
           <span className="bg-gradient-to-r from-blue-200 to-blue-400 bg-clip-text text-transparent font-bold">
             CoderView

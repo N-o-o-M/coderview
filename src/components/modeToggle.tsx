@@ -17,10 +17,10 @@ function ModeToggle() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="relative overflow-hidden"
+      className="relative overflow-hidden rounded-lg"
     >
       <AnimatePresence mode="wait">
         {theme === "dark" ? (
