@@ -4,9 +4,11 @@ import { v } from "convex/values";
 export const getAllInterviews = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("User is not authenticated");
+    if (!identity) throw new Error("Unauthorized");
 
-    return await ctx.db.query("interviews").collect();
+    const interviews = await ctx.db.query("interviews").collect();
+
+    return interviews;
   },
 });
 
@@ -15,12 +17,14 @@ export const getMyInterviews = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
 
-    return await ctx.db
+    const interviews = await ctx.db
       .query("interviews")
       .withIndex("by_candidate_id", (q) =>
         q.eq("candidateId", identity.subject)
       )
       .collect();
+
+    return interviews!;
   },
 });
 
@@ -41,7 +45,6 @@ export const createInterview = mutation({
     title: v.string(),
     description: v.optional(v.string()),
     startTime: v.number(),
-    endTime: v.optional(v.number()),
     status: v.string(),
     streamCallId: v.string(),
     candidateId: v.string(),
@@ -49,11 +52,7 @@ export const createInterview = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("User is not authenticated");
-
-    if (identity.subject !== args.candidateId) {
-      throw new Error("You can only create interviews for yourself");
-    }
+    if (!identity) throw new Error("Unauthorized");
 
     return await ctx.db.insert("interviews", {
       ...args,
