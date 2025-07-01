@@ -3,7 +3,7 @@
 import ActionCard from "@/components/ActionCard";
 import { QUICK_ACTIONS } from "@/constants";
 import { useUserRole } from "@/hooks/userUserRole";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,9 @@ import LoaderUI from "@/components/LoaderUI";
 import MeetingModal from "@/components/MeetingModal";
 import { Loader2Icon } from "lucide-react";
 import MeetingCard from "@/components/MeetingCard";
+import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const router = useRouter();
@@ -19,6 +22,11 @@ export default function Home() {
   const interviews = useQuery(api.interviews.getMyInterviews);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"start" | "join">();
+  const { user } = useUser();
+  const updateUserRole = useMutation(api.users.updateUserRole);
+  const [roleLoading, setRoleLoading] = useState(false);
+
+  const currentRole = isInterviewer ? "interviewer" : "candidate";
 
   const handleQuickAction = (title: string) => {
     switch (title) {
@@ -35,10 +43,47 @@ export default function Home() {
     }
   };
 
+  const handleRoleChange = async (role: "candidate" | "interviewer") => {
+    if (!user || currentRole === role) return;
+    setRoleLoading(true);
+    try {
+      await updateUserRole({ clerkId: user.id, role });
+      toast.success(`${role}`);
+    } finally {
+      setRoleLoading(false);
+    }
+  };
+
   if (isLoading) return <LoaderUI />;
 
   return (
     <div className="container max-w-7xl mx-auto p-6">
+      <div className="flex justify-end mb-4">
+        <div className="flex items-center gap-2">
+          <span className="font-medium">Role:</span>
+          <Button
+            variant="outline"
+            className={`px-3 py-1 rounded border hover:-translate-y-1 transition-all duration-300 hover:scale-105 ${currentRole === "candidate" ? "bg-blue-500 text-white" : "bg-white text-black"} ${roleLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={roleLoading || currentRole === "candidate"}
+            onClick={() => handleRoleChange("candidate")}
+          >
+            Candidate
+          </Button>
+          <Button
+            variant="outline"
+            className={`px-3 py-1 rounded border hover:-translate-y-1 transition-all duration-300 hover:scale-105 hover:bg-amber-300 ${currentRole === "interviewer" ? "bg-blue-500 " : "bg-white "} ${roleLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={roleLoading || currentRole === "interviewer"}
+            onClick={() => handleRoleChange("interviewer")}
+          >
+            Interviewer
+          </Button>
+          {roleLoading && (
+            <span className="ml-2 text-sm text-muted-foreground">
+              Updating...
+            </span>
+          )}
+        </div>
+      </div>
       <div className="rounded-lg bg-card p-6 border shadow-sm mb-10 justify-center items-center flex flex-col">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text">
           Welcome back!
