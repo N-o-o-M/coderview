@@ -71,7 +71,7 @@ export default function Home() {
           </Button>
           <Button
             variant="outline"
-            className={`px-3 py-1 rounded border hover:-translate-y-1 transition-all duration-300 hover:scale-105 hover:bg-amber-300 ${currentRole === "interviewer" ? "bg-blue-500 " : "bg-white "} ${roleLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`px-3 py-1 rounded border hover:-translate-y-1 transition-all duration-300 hover:scale-105  ${currentRole === "interviewer" ? "bg-blue-500 text-white" : "bg-white text-black"} ${roleLoading ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={roleLoading || currentRole === "interviewer"}
             onClick={() => handleRoleChange("interviewer")}
           >
